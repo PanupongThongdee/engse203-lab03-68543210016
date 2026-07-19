@@ -26,7 +26,7 @@
 
 ## 🚀 วิธีติดตั้งและรัน
 
-```bash
+
 # ติดตั้ง dependencies ทั้งหมด
 npm install
 
