@@ -13,15 +13,15 @@ const preview = {
 };
 
 
-
+// TODO 2: readForm()
 function readForm() {
-   // TODO 2: readForm()
+   
     return Object.fromEntries(new FormData(form).entries());
 
 }
-
+// TODO 3: renderPreview(data)
 function renderPreview(data) {
-    // TODO 3: renderPreview(data)
+    
 
     const name = (data.displayName || '').trim();
     const role = data.learningRole || '';
