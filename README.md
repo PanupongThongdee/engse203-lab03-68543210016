@@ -54,6 +54,11 @@ npm run build
 
 
 
+
+---
+
+
+
 Semantic HTML / Accessibility: มีการใช้แท็กโครงสร้างพื้นฐานครบถ้วน (<header>, <main>, <section>, <aside>, <form>) และมีการผูก aria-describedby เพื่อเชื่อมโยงช่องกรอกข้อมูลกับข้อความช่วยเหลือ/ข้อความแจ้งเตือนความผิดพลาด
 
 Event & Live Preview: ระบบแสดงผลลัพธ์การพิมพ์แบบทันที (Live Preview) รวมถึงมีฟังก์ชัน Live Counter นับจำนวนตัวอักษรในกล่อง Details แบบเรียลไทม์ และระบบเมื่อกด Submit จะส่งข้อมูลลงรายการด้านล่างพร้อมเคลียร์ฟอร์มโดยไม่รีเฟรชหน้าเว็บด้วย preventDefault()
@@ -65,6 +70,10 @@ GitHub Pages URL: https://panupongthongdee.github.io/engse203-lab03-68543210016/
 
 ภาพหน้าจอ (Screenshots)
 1. หน้าจอปกติ ไม่มี error
+    ![Screenshot](no_error.png)
+    หน้าจอปกติ ไม่ error
+    ![Screenshot](error.png)
+
 2. มุมมอง (375px)
 3. Live Preview
 4. Success
