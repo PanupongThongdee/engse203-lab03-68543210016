@@ -1,60 +1,108 @@
-import './style.css'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.js'
 
-document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+// import './style.css';
+// TODO 1: query preview/status/list elements
 
-<div class="ticks"></div>
+const form = document.querySelector('#profile-form');
+const status = document.querySelector('#form-status');
+const goalCount = document.querySelector('#goal-count');
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+const preview = {
+    displayName: document.querySelector('#preview-name'),
+    learningRole: document.querySelector('#preview-type'), // แก้เป็น #preview-type
+    learningGoal: document.querySelector('#preview-details'), // แก้เป็น #preview-details
+};
 
-setupCounter(document.querySelector('#counter'))
+
+
+function readForm() {
+   // TODO 2: readForm()
+    return Object.fromEntries(new FormData(form).entries());
+
+}
+
+function renderPreview(data) {
+    // TODO 3: renderPreview(data)
+    
+    const name = (data.displayName || '').trim();
+    const role = data.learningRole || '';
+    const goal = (data.learningGoal || '').trim();
+
+    preview.displayName.textContent = name || 'ยังไม่ระบุชื่อ';
+    preview.learningRole.textContent = role || 'ยังไม่เลือกประเภท'; // หรือ 'ยังไม่เลือกบทบาท'
+    preview.learningGoal.textContent = goal || 'ยังไม่มีรายละเอียด'; // หรือ 'ยังไม่มีเป้าหมายการเรียนรู้'
+    
+    goalCount.textContent = `${goal.length} ตัวอักษร`;
+}
+
+// TODO 4: validate(data)
+function validate(data) {
+    // TODO 7: ตรวจชื่อ >= 2, role ต้องเลือก, goal >= 10
+    const errors = {};
+
+    if (data.displayName.trim().length < 2) {
+        errors.displayName = 'กรุณากรอกชื่ออย่างน้อย 2 ตัวอักษร';
+    }
+
+    if (!data.learningRole) {
+        errors.learningRole = 'กรุณาเลือกบทบาทที่สนใจ';
+    }
+
+    if (data.learningGoal.trim().length < 10) {
+        errors.learningGoal = 'กรุณาเขียนเป้าหมายอย่างน้อย 10 ตัวอักษร';
+    }
+
+    return errors;
+}
+
+// TODO 5: renderErrors(errors)
+function renderErrors(errors) {
+    // TODO 8: แสดง error ใกล้ field และกำหนด aria-invalid
+    for (const name of ['displayName', 'learningRole', 'learningGoal']) {
+        const field = form.elements[name];
+        const output = document.querySelector(`#${name}-error`);
+        const message = errors[name] ?? '';
+
+        output.textContent = message;
+        field.setAttribute('aria-invalid', String(Boolean(message)));
+    }
+}
+
+// TODO 6: input and submit listeners
+form.addEventListener('input', () => {
+    const data = readForm();
+    renderPreview(data);
+});
+
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+
+    const data = readForm();
+    const errors = validate(data);
+    renderErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+        renderStatus('invalid', 'ยังบันทึกไม่ได้ กรุณาตรวจสอบข้อมูล');
+        form.querySelector('[aria-invalid="true"]')?.focus();
+        return;
+    }
+
+    renderStatus('success', `พร้อมแล้ว ${data.displayName}! ข้อมูลผ่านการตรวจสอบ`);
+
+});
+
+function renderStatus(state, message) {
+    status.dataset.state = state;
+    status.textContent = message;
+}
+
+
+
+
+renderPreview(readForm());
+renderStatus('idle', 'เริ่มพิมพ์เพื่อทดลอง Event และ Live Preview');
+
+console.log('LAB 3 starter ready', form);
+
