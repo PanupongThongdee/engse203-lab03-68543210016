@@ -1,5 +1,4 @@
 
-// import './style.css';
 // TODO 1: query preview/status/list elements
 
 const form = document.querySelector('#profile-form');
@@ -23,7 +22,7 @@ function readForm() {
 
 function renderPreview(data) {
     // TODO 3: renderPreview(data)
-    
+
     const name = (data.displayName || '').trim();
     const role = data.learningRole || '';
     const goal = (data.learningGoal || '').trim();
